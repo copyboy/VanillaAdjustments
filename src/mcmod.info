@@ -1,0 +1,8 @@
+[
+  {
+    "modid": "vanilladj",
+    "name": "VanillaAdjustments",
+    "version": "@VERSION@",
+    "authors": [ "copygirl" ]
+  }
+]
