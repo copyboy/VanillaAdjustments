@@ -14,7 +14,7 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-public class RecipesSmoothstone {
+public final class StoneReplacementRecipes {
 	
 	private static Object[] replaceIn = {
 		Item.swordStone,
@@ -28,9 +28,9 @@ public class RecipesSmoothstone {
 		Item.brewingStand
 	};
 	
-	private RecipesSmoothstone() {  }
+	private StoneReplacementRecipes() {  }
 	
-	public static void initialize() {
+	public static void add() {
 		
 		Item cobblestone = Item.itemsList[Block.cobblestone.blockID];
 		Item smoothstone = Item.itemsList[Block.stone.blockID];

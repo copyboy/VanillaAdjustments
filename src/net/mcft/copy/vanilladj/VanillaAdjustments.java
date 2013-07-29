@@ -28,7 +28,9 @@ public class VanillaAdjustments {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		
-		RecipesSmoothstone.initialize();
+		StoneReplacementRecipes.add();
+		ReverseSlabRecipes.add();
+		ReverseStairRecipes.add();
 		
 	}
 	
