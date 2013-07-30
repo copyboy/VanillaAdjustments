@@ -2,6 +2,11 @@ package net.mcft.copy.vanilladj;
 
 import java.util.logging.Logger;
 
+import net.mcft.copy.vanilladj.misc.Constants;
+import net.mcft.copy.vanilladj.recipe.RecipeIterator;
+import net.mcft.copy.vanilladj.recipes.SlabRecipeReverser;
+import net.mcft.copy.vanilladj.recipes.StairRecipeReverser;
+import net.mcft.copy.vanilladj.recipes.StoneRecipeReplacer;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -28,9 +33,13 @@ public class VanillaAdjustments {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		
-		StoneReplacementRecipes.add();
-		ReverseSlabRecipes.add();
-		ReverseStairRecipes.add();
+		RecipeIterator iterator = new RecipeIterator();
+		
+		iterator.listen(StoneRecipeReplacer.instance);
+		iterator.listen(SlabRecipeReverser.instance);
+		iterator.listen(StairRecipeReverser.instance);
+		
+		iterator.run();
 		
 	}
 	
