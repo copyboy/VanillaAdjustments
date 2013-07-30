@@ -3,6 +3,7 @@ package net.mcft.copy.vanilladj.recipes;
 import net.mcft.copy.vanilladj.recipe.RecipeReverser;
 import net.minecraft.block.Block;
 
+/** Adds reverse stair crafting recipes, so that 2 stairs => 3 blocks. */
 public final class StairRecipeReverser extends RecipeReverser {
 	
 	private static final Object[] reverse = {

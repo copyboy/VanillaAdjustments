@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 
+/** Iterates over all recipes and hands them to all listeners. */
 public class RecipeIterator {
 	
 	private List<IRecipeListener> listeners = new ArrayList<IRecipeListener>();

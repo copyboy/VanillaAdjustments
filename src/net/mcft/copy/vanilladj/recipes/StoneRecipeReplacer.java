@@ -4,6 +4,7 @@ import net.mcft.copy.vanilladj.recipe.RecipeReplacer;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
+/** Replaces cobblestone in most vanilla recipes with smoothstone. */
 public final class StoneRecipeReplacer extends RecipeReplacer {
 	
 	private static final Object replace = Block.cobblestone;

@@ -13,6 +13,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.common.registry.GameRegistry;
 
+/** Adds reverse crafting recipes for recipes of some items. */
 public class RecipeReverser implements IRecipeListener {
 	
 	private final ItemStack[] reverse;

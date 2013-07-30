@@ -10,6 +10,7 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+/** Replaces one item with another in recipes of some items. */
 public class RecipeReplacer implements IRecipeListener {
 	
 	private final ItemStack replace;
@@ -32,7 +33,7 @@ public class RecipeReplacer implements IRecipeListener {
 	public void doSomethingWith(IRecipe recipe) {
 		
 		ItemStack output = recipe.getRecipeOutput();
-		if ((output == null) || !Utils.contains(replaceIn, output)) return;
+		if ((output == null) || ((replaceIn.length > 0) && !Utils.contains(replaceIn, output))) return;
 		
 		if (recipe instanceof ShapedRecipes) {
 			
