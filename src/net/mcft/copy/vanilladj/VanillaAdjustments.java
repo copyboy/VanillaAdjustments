@@ -14,6 +14,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = Constants.modId,
+     name = Constants.modName,
      version = "@VERSION@",
      useMetadata = true)
 public class VanillaAdjustments {
