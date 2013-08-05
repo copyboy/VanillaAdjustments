@@ -1,16 +1,12 @@
 package net.mcft.copy.vanilladj.recipe;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import net.mcft.copy.vanilladj.misc.Utils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 /** Adds reverse crafting recipes for recipes of some items. */
@@ -27,7 +23,7 @@ public class RecipeReverser implements IRecipeListener {
 	}
 	
 	@Override
-	public void doSomethingWith(IRecipe recipe) {
+	public void doSomethingWith(RecipeIterator iterator, IRecipe recipe) {
 		
 		ItemStack output = recipe.getRecipeOutput();
 		if ((output == null) || !Utils.contains(reverse, output)) return;
@@ -35,24 +31,10 @@ public class RecipeReverser implements IRecipeListener {
 		int resultAmount = output.stackSize;
 		int recipeAmount = 0;
 		
-		List<ItemStack> list = new ArrayList<ItemStack>();
-		
-		if (recipe instanceof ShapedRecipes)
-			list.addAll(Arrays.asList(((ShapedRecipes)recipe).recipeItems));
-		else if (recipe instanceof ShapelessRecipes)
-			list.addAll(((ShapelessRecipes)recipe).recipeItems);
-		else if (recipe instanceof ShapedOreRecipe)
-			for (Object shapedItem : ((ShapedOreRecipe)recipe).getInput())
-				if (shapedItem instanceof ItemStack)
-					list.add((ItemStack)shapedItem);
-		else if (recipe instanceof ShapelessOreRecipe)
-			for (Object shapelessItem : ((ShapelessOreRecipe)recipe).getInput())
-				if (shapelessItem instanceof ItemStack)
-					list.add((ItemStack)shapelessItem);
+		RecipeContainer container = new RecipeContainer(recipe);
 		
 		ItemStack recipeItem = null;
-		for (ItemStack item : list) {
-			if (item == null) continue;
+		for (ItemStack item : container.getItemStacksOnly()) {
 			if (recipeItem == null) recipeItem = item.copy();
 			else if (!Utils.matches(recipeItem, item)) return;
 			recipeAmount++;

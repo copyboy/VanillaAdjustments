@@ -11,14 +11,33 @@ public class RecipeIterator {
 	
 	private List<IRecipeListener> listeners = new ArrayList<IRecipeListener>();
 	
+	private boolean iterating = false;
+	private boolean remove;
+	
 	public void run() {
+		
+		if (iterating) throw new IllegalStateException("Already iterating.");
+		iterating = true;
 		
 		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
 		int count = recipes.size();
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i < count; i++) {
+			IRecipe recipe = recipes.get(i);
+			remove = false;
 			for (IRecipeListener listener : listeners)
-				listener.doSomethingWith(recipes.get(i));
+				listener.doSomethingWith(this, recipe);
+			if (remove) {
+				recipes.remove(i);
+				count--;
+				i--;
+			}
+		}
 		
+	}
+	
+	public void remove() {
+		if (!iterating) throw new IllegalStateException("Not iterating.");
+		remove = true;
 	}
 	
 	public void listen(IRecipeListener listener) {

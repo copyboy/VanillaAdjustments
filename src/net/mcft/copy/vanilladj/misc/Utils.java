@@ -1,8 +1,12 @@
 package net.mcft.copy.vanilladj.misc;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlockWithMetadata;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public final class Utils {
 	
@@ -35,11 +39,48 @@ public final class Utils {
 		                                   (bDmg == Constants.anyDamage)));
 	}
 	
-	public static boolean contains(ItemStack[] items, ItemStack stack) {
-		for (ItemStack s : items)
+	public static boolean matchesOreDict(ItemStack a, Object b) {
+		if (b == null) return (a == null);
+		else if (b instanceof ItemStack)
+			return matches(a, (ItemStack)b);
+		else if (b instanceof String) {
+			int id = OreDictionary.getOreID(a);
+			return ((id >= 0) ? OreDictionary.getOreName(id).equals(b) : false);
+		} else if (b instanceof ArrayList) {
+			for (ItemStack s : (ArrayList<ItemStack>)b)
+				if (matches(a, s)) return true;
+			return false;
+		} else throw new IllegalArgumentException("b is not a String or ItemStack.");
+	}
+	
+	public static int indexOf(ItemStack[] items, ItemStack stack) {
+		for (int i = 0; i < items.length; i++) {
+			ItemStack s = items[i];
 			if (Utils.matches(stack, s))
-				return true;
-		return false;
+				return i;
+		}
+		return -1;
+	}
+	
+	public static boolean contains(ItemStack[] items, ItemStack stack) {
+		return (indexOf(items, stack) >= 0);
+	}
+	
+	public static void replaceWithMetadata(Block replace, Class<? extends Block> with) {
+		int id = replace.blockID;
+		Block.blocksList[id] = null;
+		Item.itemsList[id] = null;
+		try {
+			Block block = with.getConstructor(int.class).newInstance(id);
+			new ItemBlockWithMetadata(id - 256, block);
+		} catch (Exception e) { throw new Error(e); }
+	}
+	
+	public static void replace(Item replace, Class<? extends Item> with) {
+		int id = replace.itemID;
+		Item.itemsList[id] = null;
+		try { with.getConstructor(int.class).newInstance(id - 256); }
+		catch (Exception e) { throw new Error(e); }
 	}
 	
 }
