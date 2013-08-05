@@ -13,21 +13,24 @@ public class RecipeItemReplacerWood implements IRecipeListener {
 	
 	private final ItemStack[] replace;
 	private final Class[] with;
+	private final boolean[] reverse;
 	
 	private ItemStack[] matchOnly = null;
 	
 	public RecipeItemReplacerWood(Object... replace) {
 		
-		if ((replace.length % 2) > 0)
-			throw new IllegalArgumentException("Number of arguments need to be even.");
+		if ((replace.length % 3) > 0)
+			throw new IllegalArgumentException("Number of arguments need to be divisible by 3.");
 		
-		int count = replace.length / 2;
+		int count = replace.length / 3;
 		this.replace = new ItemStack[count];
 		this.with = new Class[count];
+		this.reverse = new boolean[count];
 		
 		for (int i = 0; i < count; i++) {
-			this.replace[i] = Utils.makeStack(replace[i * 2]);
-			this.with[i] = (Class)replace[i * 2 + 1];
+			this.replace[i] = Utils.makeStack(replace[i * 3]);
+			this.with[i] = (Class)replace[i * 3 + 1];
+			this.reverse[i] = (Boolean)replace[i * 3 + 2];
 		}
 		
 	}
@@ -47,6 +50,10 @@ public class RecipeItemReplacerWood implements IRecipeListener {
 		int index = Utils.indexOf(this.replace, output);
 		if (index < 0) return;
 		
+		ItemStack replace = this.replace[index];
+		Class with = this.with[index];
+		boolean reverse = this.reverse[index];
+		
 		RecipeContainer container = new RecipeContainer(recipe);
 		
 		if (matchOnly != null)
@@ -61,18 +68,14 @@ public class RecipeItemReplacerWood implements IRecipeListener {
 			replaceWood(cloneContainer, Block.wood.blockID, i);
 			replaceWood(cloneContainer, Block.planks.blockID, i);
 			replaceWood(cloneContainer, Item.stick.itemID, i);
-			clone.getRecipeOutput().setItemDamage(i);
+			ItemStack cloneOutput = clone.getRecipeOutput();
+			cloneOutput.setItemDamage(i);
 			GameRegistry.addRecipe(clone);
+			if (reverse) RecipeReverser.reverse(clone);
 		}
 		
-		int id = replace[index].itemID;
-		Class with = this.with[index];
-		
-		if (Item.class.isAssignableFrom(with)) Utils.replace(Item.itemsList[id], with);
-		else Utils.replaceWithMetadata(Block.blocksList[id], with);
-		
-//		if (container.isOreRecipe)
-//			GameRegistry.addRecipe(recipe);
+		if (Item.class.isAssignableFrom(with)) Utils.replace(replace.getItem(), with);
+		else Utils.replaceWithMetadata(Block.blocksList[replace.itemID], with);
 		
 		iterator.remove();
 		

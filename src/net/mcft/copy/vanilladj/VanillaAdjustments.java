@@ -50,8 +50,8 @@ public class VanillaAdjustments {
 		iterator.listen(StairRecipeReverser.instance);
 		
 		iterator.listen(new RecipeItemReplacerWood(
-				Item.stick, ItemStick.class,
-				Block.pressurePlatePlanks, BlockWoodPressurePlate.class));
+				Item.stick, ItemStick.class, false,
+				Block.pressurePlatePlanks, BlockWoodPressurePlate.class, true));
 		
 		iterator.run();
 		

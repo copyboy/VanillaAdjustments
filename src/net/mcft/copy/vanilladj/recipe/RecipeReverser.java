@@ -3,6 +3,7 @@ package net.mcft.copy.vanilladj.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.mcft.copy.betterstorage.misc.Constants;
 import net.mcft.copy.vanilladj.misc.Utils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -27,7 +28,13 @@ public class RecipeReverser implements IRecipeListener {
 		
 		ItemStack output = recipe.getRecipeOutput();
 		if ((output == null) || !Utils.contains(reverse, output)) return;
-
+		reverse(recipe);
+		
+	}
+	
+	public static void reverse(IRecipe recipe) {
+		
+		ItemStack output = recipe.getRecipeOutput();
 		int resultAmount = output.stackSize;
 		int recipeAmount = 0;
 		
@@ -49,6 +56,9 @@ public class RecipeReverser implements IRecipeListener {
 		for (int i = 0; i < resultAmount; i++) recipeItems.add(output);
 		
 		output = recipeItem.copy();
+		if (output.getItemDamage() == Constants.anyDamage)
+			output.setItemDamage(0);
+		System.out.println(output);
 		output.stackSize = recipeAmount;
 		
 		GameRegistry.addRecipe(new ShapelessRecipes(output, recipeItems));
