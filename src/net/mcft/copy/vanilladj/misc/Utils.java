@@ -54,14 +54,11 @@ public final class Utils {
 	}
 	
 	public static int indexOf(ItemStack[] items, ItemStack stack) {
-		for (int i = 0; i < items.length; i++) {
-			ItemStack s = items[i];
-			if (Utils.matches(stack, s))
+		for (int i = 0; i < items.length; i++)
+			if (Utils.matches(stack, items[i]))
 				return i;
-		}
 		return -1;
 	}
-	
 	public static boolean contains(ItemStack[] items, ItemStack stack) {
 		return (indexOf(items, stack) >= 0);
 	}

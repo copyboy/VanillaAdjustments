@@ -11,10 +11,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeItemReplacerWood implements IRecipeListener {
 	
-	private final ItemStack[] replace;
-	private final Class[] with;
-	private final boolean[] reverse;
-	
+	private final Entry[] entries;
 	private ItemStack[] matchOnly = null;
 	
 	public RecipeItemReplacerWood(Object... replace) {
@@ -23,15 +20,13 @@ public class RecipeItemReplacerWood implements IRecipeListener {
 			throw new IllegalArgumentException("Number of arguments need to be divisible by 3.");
 		
 		int count = replace.length / 3;
-		this.replace = new ItemStack[count];
-		this.with = new Class[count];
-		this.reverse = new boolean[count];
+		entries = new Entry[count];
+		for (int i = 0; i < count; i++)
+			entries[i] = new Entry(Utils.makeStack(replace[i * 3]),
+			                       (Class)replace[i * 3 + 1],
+			                       (Boolean)replace[i * 3 + 2]);
 		
-		for (int i = 0; i < count; i++) {
-			this.replace[i] = Utils.makeStack(replace[i * 3]);
-			this.with[i] = (Class)replace[i * 3 + 1];
-			this.reverse[i] = (Boolean)replace[i * 3 + 2];
-		}
+		matchOnly(Block.wood, Block.planks, Item.stick);
 		
 	}
 	
@@ -47,20 +42,26 @@ public class RecipeItemReplacerWood implements IRecipeListener {
 		ItemStack output = recipe.getRecipeOutput();
 		if (output == null) return;
 		
-		int index = Utils.indexOf(this.replace, output);
-		if (index < 0) return;
-		
-		ItemStack replace = this.replace[index];
-		Class with = this.with[index];
-		boolean reverse = this.reverse[index];
+		Entry entry = null;
+		for (Entry e : entries)
+			if (Utils.matches(output, e.replace)) {
+				entry = e;
+				break;
+			}
+		if (entry == null) return;
 		
 		RecipeContainer container = new RecipeContainer(recipe);
 		
 		if (matchOnly != null)
-			for (ItemStack match : matchOnly)
-				for (Object item : container.items)
-					if (!Utils.matchesOreDict(match, item))
-						return;
+			for (Object item : container.items)
+				for (ItemStack match : matchOnly) {
+					boolean isMatch = false;
+					if (Utils.matchesOreDict(match, item)) {
+						isMatch = true;
+						break;
+					}
+					if (!isMatch) return;
+				}
 		
 		for (int i = 0; i < BlockWood.woodType.length; i++) {
 			IRecipe clone = container.cloneRecipe();
@@ -71,11 +72,12 @@ public class RecipeItemReplacerWood implements IRecipeListener {
 			ItemStack cloneOutput = clone.getRecipeOutput();
 			cloneOutput.setItemDamage(i);
 			GameRegistry.addRecipe(clone);
-			if (reverse) RecipeReverser.reverse(clone);
+			if (entry.reverse) RecipeReverser.reverse(clone);
 		}
 		
-		if (Item.class.isAssignableFrom(with)) Utils.replace(replace.getItem(), with);
-		else Utils.replaceWithMetadata(Block.blocksList[replace.itemID], with);
+		if (Item.class.isAssignableFrom(entry.with))
+			Utils.replace(entry.replace.getItem(), entry.with);
+		else Utils.replaceWithMetadata(Block.blocksList[entry.replace.itemID], entry.with);
 		
 		iterator.remove();
 		
@@ -83,6 +85,17 @@ public class RecipeItemReplacerWood implements IRecipeListener {
 	
 	private void replaceWood(RecipeContainer container, int id, int meta) {
 		container.replaceOreDict(new ItemStack(id, 1, Constants.anyDamage), new ItemStack(id, 1, meta));
+	}
+	
+	private static class Entry {
+		public final ItemStack replace;
+		public final Class with;
+		public final boolean reverse;
+		public Entry(ItemStack replace, Class with, boolean reverse) {
+			this.replace = replace;
+			this.with = with;
+			this.reverse = reverse;
+		}
 	}
 	
 }
