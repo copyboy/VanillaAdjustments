@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import net.mcft.copy.vanilladj.block.BlockWoodPressurePlate;
 import net.mcft.copy.vanilladj.item.ItemStick;
 import net.mcft.copy.vanilladj.misc.Constants;
+import net.mcft.copy.vanilladj.misc.ToolDurability;
 import net.mcft.copy.vanilladj.recipe.RecipeItemReplacerWood;
 import net.mcft.copy.vanilladj.recipe.RecipeIterator;
 import net.mcft.copy.vanilladj.recipes.SlabRecipeReverser;
@@ -40,6 +41,10 @@ public class VanillaAdjustments {
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
+		
+		ToolDurability.set(112, Item.swordWood, Item.pickaxeWood, Item.shovelWood, Item.axeWood, Item.hoeWood);
+		ToolDurability.set(144, Item.swordStone, Item.pickaxeStone, Item.shovelStone, Item.axeStone, Item.hoeStone);
+		ToolDurability.set(96, Item.swordGold, Item.pickaxeGold, Item.shovelGold, Item.axeGold, Item.hoeGold);
 		
 		OreDictionary.registerOre("stickWood", new ItemStack(Item.stick, 1, Constants.anyDamage));
 		

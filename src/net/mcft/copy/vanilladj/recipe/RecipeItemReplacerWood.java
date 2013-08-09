@@ -53,15 +53,15 @@ public class RecipeItemReplacerWood implements IRecipeListener {
 		RecipeContainer container = new RecipeContainer(recipe);
 		
 		if (matchOnly != null)
-			for (Object item : container.items)
-				for (ItemStack match : matchOnly) {
-					boolean isMatch = false;
+			for (Object item : container.items) {
+				boolean isMatch = false;
+				for (ItemStack match : matchOnly)
 					if (Utils.matchesOreDict(match, item)) {
 						isMatch = true;
 						break;
 					}
-					if (!isMatch) return;
-				}
+				if (!isMatch) return;
+			}
 		
 		for (int i = 0; i < BlockWood.woodType.length; i++) {
 			IRecipe clone = container.cloneRecipe();
