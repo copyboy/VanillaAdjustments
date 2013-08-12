@@ -18,7 +18,7 @@ public class EntityRandomDropEvent {
 		
 		if (event.entity instanceof EntityChicken &&
 		    !Loader.isModLoaded("ChickenShed"))
-			if ((event.entity.ticksExisted % 20 * 20 == 0) && (rand.nextInt(3) == 0))
+			if ((event.entity.ticksExisted % 4000 == 0) && (rand.nextInt(6) == 0))
 				event.entity.dropItem(Item.feather.itemID, 1 + rand.nextInt(2));
 		
 	}
