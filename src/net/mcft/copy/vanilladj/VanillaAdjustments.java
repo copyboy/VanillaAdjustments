@@ -22,6 +22,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
@@ -44,13 +45,21 @@ public class VanillaAdjustments {
 	}
 	
 	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
+	public void init(FMLInitializationEvent event) {
+		
+		MinecraftForge.EVENT_BUS.register(new EntityDropModifier());
+		MinecraftForge.EVENT_BUS.register(new EntityRandomDropEvent());
 		
 		ItemUtils.setDurability(112, Item.swordWood, Item.pickaxeWood, Item.shovelWood, Item.axeWood, Item.hoeWood);
 		ItemUtils.setDurability(144, Item.swordStone, Item.pickaxeStone, Item.shovelStone, Item.axeStone, Item.hoeStone);
 		ItemUtils.setDurability(96, Item.swordGold, Item.pickaxeGold, Item.shovelGold, Item.axeGold, Item.hoeGold);
 		
 		OreDictionary.registerOre("stickWood", new ItemStack(Item.stick, 1, Constants.anyDamage));
+		
+	}
+	
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
 		
 		RecipeIterator iterator = new RecipeIterator();
 		
@@ -64,9 +73,6 @@ public class VanillaAdjustments {
 				Block.fence, BlockWoodFence.class, true));
 		
 		iterator.run();
-		
-		MinecraftForge.EVENT_BUS.register(new EntityDropModifier());
-		MinecraftForge.EVENT_BUS.register(new EntityRandomDropEvent());
 		
 	}
 	
