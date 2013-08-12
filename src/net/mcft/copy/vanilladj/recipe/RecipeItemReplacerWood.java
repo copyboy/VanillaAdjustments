@@ -1,6 +1,6 @@
 package net.mcft.copy.vanilladj.recipe;
 
-import net.mcft.copy.betterstorage.misc.Constants;
+import net.mcft.copy.vanilladj.misc.Constants;
 import net.mcft.copy.vanilladj.misc.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWood;
