@@ -3,6 +3,8 @@ package net.mcft.copy.vanilladj;
 import java.util.logging.Logger;
 
 import net.mcft.copy.vanilladj.block.BlockWoodPressurePlate;
+import net.mcft.copy.vanilladj.entity.EntityDropModifier;
+import net.mcft.copy.vanilladj.entity.EntityRandomDropEvent;
 import net.mcft.copy.vanilladj.item.ItemStick;
 import net.mcft.copy.vanilladj.misc.Constants;
 import net.mcft.copy.vanilladj.misc.ToolDurability;
@@ -14,6 +16,7 @@ import net.mcft.copy.vanilladj.recipes.StoneRecipeReplacer;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -59,6 +62,9 @@ public class VanillaAdjustments {
 				Block.pressurePlatePlanks, BlockWoodPressurePlate.class, true));
 		
 		iterator.run();
+		
+		MinecraftForge.EVENT_BUS.register(new EntityDropModifier());
+		MinecraftForge.EVENT_BUS.register(new EntityRandomDropEvent());
 		
 	}
 	
