@@ -2,12 +2,13 @@ package net.mcft.copy.vanilladj;
 
 import java.util.logging.Logger;
 
+import net.mcft.copy.vanilladj.block.BlockWoodFence;
 import net.mcft.copy.vanilladj.block.BlockWoodPressurePlate;
 import net.mcft.copy.vanilladj.entity.EntityDropModifier;
 import net.mcft.copy.vanilladj.entity.EntityRandomDropEvent;
 import net.mcft.copy.vanilladj.item.ItemStick;
 import net.mcft.copy.vanilladj.misc.Constants;
-import net.mcft.copy.vanilladj.misc.ToolDurability;
+import net.mcft.copy.vanilladj.misc.ItemUtils;
 import net.mcft.copy.vanilladj.recipe.RecipeItemReplacerWood;
 import net.mcft.copy.vanilladj.recipe.RecipeIterator;
 import net.mcft.copy.vanilladj.recipes.SlabRecipeReverser;
@@ -45,9 +46,9 @@ public class VanillaAdjustments {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		
-		ToolDurability.set(112, Item.swordWood, Item.pickaxeWood, Item.shovelWood, Item.axeWood, Item.hoeWood);
-		ToolDurability.set(144, Item.swordStone, Item.pickaxeStone, Item.shovelStone, Item.axeStone, Item.hoeStone);
-		ToolDurability.set(96, Item.swordGold, Item.pickaxeGold, Item.shovelGold, Item.axeGold, Item.hoeGold);
+		ItemUtils.setDurability(112, Item.swordWood, Item.pickaxeWood, Item.shovelWood, Item.axeWood, Item.hoeWood);
+		ItemUtils.setDurability(144, Item.swordStone, Item.pickaxeStone, Item.shovelStone, Item.axeStone, Item.hoeStone);
+		ItemUtils.setDurability(96, Item.swordGold, Item.pickaxeGold, Item.shovelGold, Item.axeGold, Item.hoeGold);
 		
 		OreDictionary.registerOre("stickWood", new ItemStack(Item.stick, 1, Constants.anyDamage));
 		
@@ -59,7 +60,8 @@ public class VanillaAdjustments {
 		
 		iterator.listen(new RecipeItemReplacerWood(
 				Item.stick, ItemStick.class, false,
-				Block.pressurePlatePlanks, BlockWoodPressurePlate.class, true));
+				Block.pressurePlatePlanks, BlockWoodPressurePlate.class, true,
+				Block.fence, BlockWoodFence.class, true));
 		
 		iterator.run();
 		

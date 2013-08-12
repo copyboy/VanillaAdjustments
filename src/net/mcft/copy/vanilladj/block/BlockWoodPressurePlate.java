@@ -2,6 +2,7 @@ package net.mcft.copy.vanilladj.block;
 
 import java.util.List;
 
+import net.mcft.copy.vanilladj.misc.WoodUtils;
 import net.minecraft.block.BlockPressurePlate;
 import net.minecraft.block.BlockWood;
 import net.minecraft.block.EnumMobType;
@@ -28,10 +29,7 @@ public class BlockWoodPressurePlate extends BlockPressurePlate {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
-		String[] woodTypes = BlockWood.woodType;
-		icons = new Icon[woodTypes.length];
-		for (int i = 0; i < icons.length; i++)
-			icons[i] = iconRegister.registerIcon("planks_" + woodTypes[i]);
+		icons = WoodUtils.registerIcons(iconRegister);
 	}
 	
 	@Override

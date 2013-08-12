@@ -2,11 +2,11 @@ package net.mcft.copy.vanilladj.misc;
 
 import net.minecraft.item.Item;
 
-public final class ToolDurability {
+public final class ItemUtils {
 	
-	private ToolDurability() {  }
+	private ItemUtils() {  }
 	
-	public static void set(int durability, Item... tools) {
+	public static void setDurability(int durability, Item... tools) {
 		for (Item tool : tools)
 			tool.setMaxDamage(durability);
 	}
