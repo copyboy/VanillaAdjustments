@@ -58,7 +58,6 @@ public class RecipeReverser implements IRecipeListener {
 		output = recipeItem.copy();
 		if (output.getItemDamage() == Constants.anyDamage)
 			output.setItemDamage(0);
-		System.out.println(output);
 		output.stackSize = recipeAmount;
 		
 		GameRegistry.addRecipe(new ShapelessRecipes(output, recipeItems));

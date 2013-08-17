@@ -69,8 +69,9 @@ public class VanillaAdjustments {
 		
 		iterator.listen(new RecipeItemReplacerWood(
 				Item.stick, ItemStick.class, false,
-				Block.pressurePlatePlanks, BlockWoodPressurePlate.class, true,
-				Block.fence, BlockWoodFence.class, true));
+				Block.pressurePlatePlanks, BlockWoodPressurePlate.class, true
+//				Block.fence, BlockWoodFence.class, true
+			));
 		
 		iterator.run();
 		
