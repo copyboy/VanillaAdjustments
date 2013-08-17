@@ -74,6 +74,11 @@ public class BlockWoodPressurePlate extends BlockPressurePlate {
 		return super.getPowerSupply(meta / 8);
 	}
 	
+	@Override
+	public int damageDropped(int j) {
+		return j;
+	}
+	
 	protected int getMetaFromWeight(int power, int meta) {
 		return (meta % 8 | super.getMetaFromWeight(power) * 8);
 	}
