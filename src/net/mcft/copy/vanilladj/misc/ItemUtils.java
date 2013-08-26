@@ -6,9 +6,14 @@ public final class ItemUtils {
 	
 	private ItemUtils() {  }
 	
-	public static void setDurability(int durability, Item... tools) {
+	public static void setToolDurability(int durability, Item... tools) {
 		for (Item tool : tools)
 			tool.setMaxDamage(durability);
+	}
+	
+	public static void adjustArmorDurability(double factor, Item... armors) {
+		for (Item armor : armors)
+			armor.setMaxDamage((int)(armor.getMaxDamage() * factor));
 	}
 	
 }

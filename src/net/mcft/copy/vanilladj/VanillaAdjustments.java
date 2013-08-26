@@ -50,9 +50,12 @@ public class VanillaAdjustments {
 		MinecraftForge.EVENT_BUS.register(new EntityDropModifier());
 		MinecraftForge.EVENT_BUS.register(new EntityRandomDropEvent());
 		
-		ItemUtils.setDurability(112, Item.swordWood, Item.pickaxeWood, Item.shovelWood, Item.axeWood, Item.hoeWood);
-		ItemUtils.setDurability(144, Item.swordStone, Item.pickaxeStone, Item.shovelStone, Item.axeStone, Item.hoeStone);
-		ItemUtils.setDurability(96, Item.swordGold, Item.pickaxeGold, Item.shovelGold, Item.axeGold, Item.hoeGold);
+		ItemUtils.setToolDurability(112, Item.swordWood, Item.pickaxeWood, Item.shovelWood, Item.axeWood, Item.hoeWood);
+		ItemUtils.setToolDurability(144, Item.swordStone, Item.pickaxeStone, Item.shovelStone, Item.axeStone, Item.hoeStone);
+		ItemUtils.setToolDurability(96, Item.swordGold, Item.pickaxeGold, Item.shovelGold, Item.axeGold, Item.hoeGold);
+		
+		ItemUtils.adjustArmorDurability(2.25, Item.helmetLeather, Item.plateLeather, Item.legsLeather, Item.bootsLeather);
+		ItemUtils.adjustArmorDurability(1.25, Item.helmetGold, Item.plateGold, Item.legsGold, Item.bootsGold);
 		
 		OreDictionary.registerOre("stickWood", new ItemStack(Item.stick, 1, Constants.anyDamage));
 		
