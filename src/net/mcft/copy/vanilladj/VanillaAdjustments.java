@@ -2,13 +2,15 @@ package net.mcft.copy.vanilladj;
 
 import java.util.logging.Logger;
 
-import net.mcft.copy.vanilladj.block.BlockWoodFence;
 import net.mcft.copy.vanilladj.block.BlockWoodPressurePlate;
 import net.mcft.copy.vanilladj.entity.EntityDropModifier;
 import net.mcft.copy.vanilladj.entity.EntityRandomDropEvent;
+import net.mcft.copy.vanilladj.item.ItemPickaxeDiamond;
+import net.mcft.copy.vanilladj.item.ItemPickaxeIron;
 import net.mcft.copy.vanilladj.item.ItemStick;
 import net.mcft.copy.vanilladj.misc.Constants;
 import net.mcft.copy.vanilladj.misc.ItemUtils;
+import net.mcft.copy.vanilladj.misc.Utils;
 import net.mcft.copy.vanilladj.recipe.RecipeItemReplacerWood;
 import net.mcft.copy.vanilladj.recipe.RecipeIterator;
 import net.mcft.copy.vanilladj.recipes.SlabRecipeReverser;
@@ -50,6 +52,9 @@ public class VanillaAdjustments {
 		
 		MinecraftForge.EVENT_BUS.register(new EntityDropModifier());
 		MinecraftForge.EVENT_BUS.register(new EntityRandomDropEvent());
+		
+		Utils.replace(Item.pickaxeIron, ItemPickaxeIron.class);
+		Utils.replace(Item.pickaxeDiamond, ItemPickaxeDiamond.class);
 
 		EnumToolMaterial.STONE.customCraftingMaterial = Item.itemsList[Block.stone.blockID];
 		ItemUtils.setToolDurability(112, Item.swordWood, Item.pickaxeWood, Item.shovelWood, Item.axeWood, Item.hoeWood);
