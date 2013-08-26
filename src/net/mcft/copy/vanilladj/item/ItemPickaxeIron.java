@@ -11,8 +11,8 @@ import net.minecraft.world.World;
 
 public class ItemPickaxeIron extends ItemPickaxe {
 	
-	public ItemPickaxeIron() {
-		super(1, EnumToolMaterial.IRON);
+	public ItemPickaxeIron(int id) {
+		super(id, EnumToolMaterial.IRON);
 		setUnlocalizedName("pickaxeIron");
 		func_111206_d("iron_pickaxe");
 	}

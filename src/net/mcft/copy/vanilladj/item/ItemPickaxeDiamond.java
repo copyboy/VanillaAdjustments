@@ -11,8 +11,8 @@ import net.minecraft.world.World;
 
 public class ItemPickaxeDiamond extends ItemPickaxe {
 	
-	public ItemPickaxeDiamond() {
-		super(1, EnumToolMaterial.EMERALD);
+	public ItemPickaxeDiamond(int id) {
+		super(id, EnumToolMaterial.EMERALD);
 		setUnlocalizedName("pickaxeDiamond");
 		func_111206_d("diamond_pickaxe");
 	}
