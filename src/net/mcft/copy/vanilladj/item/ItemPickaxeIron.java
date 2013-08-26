@@ -18,10 +18,10 @@ public class ItemPickaxeIron extends ItemPickaxe {
 	}
 	
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World world, int x, int y, int z, int side, EntityLivingBase player) {
-		if ((Block.blocksList[world.getBlockId(x, y, z)] instanceof BlockStone) &&
-		    RandomUtils.getBoolean(1.0 / 4)) return true;
-		return super.onBlockDestroyed(stack, world, x, y, z, side, player);
+	public boolean onBlockDestroyed(ItemStack stack, World world, int blockID, int x, int y, int z, EntityLivingBase player) {
+		if ((Block.blocksList[blockID] instanceof BlockStone) &&
+		    RandomUtils.getBoolean(1.0 / 3)) return true;
+		return super.onBlockDestroyed(stack, world, blockID, x, y, z, player);
 	}
 	
 }
