@@ -55,7 +55,7 @@ public class VanillaAdjustments {
 		
 		Utils.replace(Item.pickaxeIron, ItemPickaxeIron.class);
 		Utils.replace(Item.pickaxeDiamond, ItemPickaxeDiamond.class);
-
+		
 		EnumToolMaterial.STONE.customCraftingMaterial = Item.itemsList[Block.stone.blockID];
 		ItemUtils.setToolDurability(112, Item.swordWood, Item.pickaxeWood, Item.shovelWood, Item.axeWood, Item.hoeWood);
 		ItemUtils.setToolDurability(144, Item.swordStone, Item.pickaxeStone, Item.shovelStone, Item.axeStone, Item.hoeStone);
