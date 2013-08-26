@@ -15,6 +15,7 @@ import net.mcft.copy.vanilladj.recipes.SlabRecipeReverser;
 import net.mcft.copy.vanilladj.recipes.StairRecipeReverser;
 import net.mcft.copy.vanilladj.recipes.StoneRecipeReplacer;
 import net.minecraft.block.Block;
+import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -49,7 +50,8 @@ public class VanillaAdjustments {
 		
 		MinecraftForge.EVENT_BUS.register(new EntityDropModifier());
 		MinecraftForge.EVENT_BUS.register(new EntityRandomDropEvent());
-		
+
+		EnumToolMaterial.STONE.customCraftingMaterial = Item.itemsList[Block.stone.blockID];
 		ItemUtils.setToolDurability(112, Item.swordWood, Item.pickaxeWood, Item.shovelWood, Item.axeWood, Item.hoeWood);
 		ItemUtils.setToolDurability(144, Item.swordStone, Item.pickaxeStone, Item.shovelStone, Item.axeStone, Item.hoeStone);
 		ItemUtils.setToolDurability(96, Item.swordGold, Item.pickaxeGold, Item.shovelGold, Item.axeGold, Item.hoeGold);
