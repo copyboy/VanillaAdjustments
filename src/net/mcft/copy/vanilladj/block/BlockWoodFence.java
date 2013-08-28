@@ -2,6 +2,7 @@ package net.mcft.copy.vanilladj.block;
 
 import java.util.List;
 
+import net.mcft.copy.vanilladj.client.renderer.BlockFenceRenderingHandler;
 import net.mcft.copy.vanilladj.misc.WoodUtils;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockWood;
@@ -37,9 +38,12 @@ public class BlockWoodFence extends BlockFence {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int meta) {
-		return icons[Math.min(meta, icons.length - 1)];
+	public Icon getIcon(int side, int metadata) {
+		return icons[Math.min(metadata, icons.length - 1)];
 	}
+	
+	@Override
+	public int getRenderType() { return BlockFenceRenderingHandler.instance.getRenderId(); }
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -47,6 +51,9 @@ public class BlockWoodFence extends BlockFence {
 		for (int i = 0; i < BlockWood.woodType.length; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
+	
+	@Override
+	public int damageDropped(int metadata) { return metadata; }
 	
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z,

@@ -2,6 +2,7 @@ package net.mcft.copy.vanilladj;
 
 import java.util.logging.Logger;
 
+import net.mcft.copy.vanilladj.block.BlockWoodFence;
 import net.mcft.copy.vanilladj.block.BlockWoodPressurePlate;
 import net.mcft.copy.vanilladj.entity.EntityDropModifier;
 import net.mcft.copy.vanilladj.entity.EntityRandomDropEvent;
@@ -79,8 +80,8 @@ public class VanillaAdjustments {
 		
 		iterator.listen(new RecipeItemReplacerWood(
 				Item.stick, ItemStick.class, false,
-				Block.pressurePlatePlanks, BlockWoodPressurePlate.class, true
-//				Block.fence, BlockWoodFence.class, true
+				Block.pressurePlatePlanks, BlockWoodPressurePlate.class, true,
+				Block.fence, BlockWoodFence.class, true
 			));
 		
 		iterator.run();
