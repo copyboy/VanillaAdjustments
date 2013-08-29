@@ -16,7 +16,6 @@ failing to be so.
 -------------
 
 Since we're going for adjustments to the vanilla Minecraft game, we won't add new items.  
-Here's some of the changes that currently come with Vanilla Adjustments:
 
 - Replaces cobblestone with smoothstone in most recipes
 - Add reverse / back-crafting recipes for slabs and stairs
@@ -26,3 +25,10 @@ Here's some of the changes that currently come with Vanilla Adjustments:
 - Add spruce, birch and jungle versions of some items / blocks
 - Adjust mob drops, like more leather, feathers and porkchops
 - Chickens randomly drop feathers
+
+Fixes
+-----
+
+We try to fix small bugs, annoying or cosmetic issues that are in vanilla Minecraft.
+
+- Can't right-click fences unless you're leading an animal
