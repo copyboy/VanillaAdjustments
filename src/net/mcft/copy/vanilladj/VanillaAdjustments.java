@@ -12,6 +12,7 @@ import net.mcft.copy.vanilladj.item.ItemStick;
 import net.mcft.copy.vanilladj.misc.Constants;
 import net.mcft.copy.vanilladj.misc.ItemUtils;
 import net.mcft.copy.vanilladj.misc.Utils;
+import net.mcft.copy.vanilladj.player.PlayerRegenerationHandler;
 import net.mcft.copy.vanilladj.recipe.RecipeItemReplacerWood;
 import net.mcft.copy.vanilladj.recipe.RecipeIterator;
 import net.mcft.copy.vanilladj.recipes.SlabRecipeReverser;
@@ -29,6 +30,8 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = Constants.modId,
      name = Constants.modName,
@@ -46,6 +49,8 @@ public class VanillaAdjustments {
 		
 		log = event.getModLog();
 		
+		Config.load(event.getSuggestedConfigurationFile());
+		
 	}
 	
 	@EventHandler
@@ -53,6 +58,8 @@ public class VanillaAdjustments {
 		
 		MinecraftForge.EVENT_BUS.register(new EntityDropModifier());
 		MinecraftForge.EVENT_BUS.register(new EntityRandomDropEvent());
+		
+		TickRegistry.registerTickHandler(new PlayerRegenerationHandler(), Side.SERVER);
 		
 		Utils.replace(Item.pickaxeIron, ItemPickaxeIron.class);
 		Utils.replace(Item.pickaxeDiamond, ItemPickaxeDiamond.class);
