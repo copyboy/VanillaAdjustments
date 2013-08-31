@@ -12,6 +12,7 @@ import net.mcft.copy.vanilladj.item.ItemStick;
 import net.mcft.copy.vanilladj.misc.Constants;
 import net.mcft.copy.vanilladj.misc.ItemUtils;
 import net.mcft.copy.vanilladj.misc.Utils;
+import net.mcft.copy.vanilladj.player.PlayerDeathDropModifier;
 import net.mcft.copy.vanilladj.player.PlayerRegenerationHandler;
 import net.mcft.copy.vanilladj.recipe.RecipeItemReplacerWood;
 import net.mcft.copy.vanilladj.recipe.RecipeIterator;
@@ -58,6 +59,7 @@ public class VanillaAdjustments {
 		
 		MinecraftForge.EVENT_BUS.register(new EntityDropModifier());
 		MinecraftForge.EVENT_BUS.register(new EntityRandomDropEvent());
+		MinecraftForge.EVENT_BUS.register(new PlayerDeathDropModifier());
 		
 		TickRegistry.registerTickHandler(new PlayerRegenerationHandler(), Side.SERVER);
 		
