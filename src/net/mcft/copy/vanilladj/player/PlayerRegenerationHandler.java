@@ -6,7 +6,6 @@ import net.mcft.copy.vanilladj.Config;
 import net.mcft.copy.vanilladj.misc.Constants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.FoodStats;
-import net.minecraft.world.World;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 

@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -43,7 +44,10 @@ public class BlockWoodFence extends BlockFence {
 	}
 	
 	@Override
-	public int getRenderType() { return BlockFenceRenderingHandler.instance.getRenderId(); }
+	public int getRenderType() {
+		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) return 11;
+		else return BlockFenceRenderingHandler.instance.getRenderId();
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
