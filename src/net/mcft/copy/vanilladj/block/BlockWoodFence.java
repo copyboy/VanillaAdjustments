@@ -67,7 +67,7 @@ public class BlockWoodFence extends BlockFence {
 			AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(x - 7, y - 7, z - 7, x + 7, y + 7, z + 7);
 			List<EntityLiving> entities = world.getEntitiesWithinAABB(EntityLiving.class, aabb);
 			for (EntityLiving entity : entities)
-				if (entity.func_110167_bD() && entity.func_110166_bE() == player)
+				if (entity.getLeashed() && entity.getLeashedToEntity() == player)
 					return true;
 			return false;
 		} else return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);

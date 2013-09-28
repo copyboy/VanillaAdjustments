@@ -14,7 +14,7 @@ public class ItemPickaxeIron extends ItemPickaxe {
 	public ItemPickaxeIron(int id) {
 		super(id, EnumToolMaterial.IRON);
 		setUnlocalizedName("pickaxeIron");
-		func_111206_d("iron_pickaxe");
+		setTextureName("iron_pickaxe");
 	}
 	
 	@Override

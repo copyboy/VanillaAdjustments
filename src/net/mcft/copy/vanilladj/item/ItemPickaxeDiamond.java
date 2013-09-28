@@ -14,7 +14,7 @@ public class ItemPickaxeDiamond extends ItemPickaxe {
 	public ItemPickaxeDiamond(int id) {
 		super(id, EnumToolMaterial.EMERALD);
 		setUnlocalizedName("pickaxeDiamond");
-		func_111206_d("diamond_pickaxe");
+		setTextureName("diamond_pickaxe");
 	}
 	
 	@Override
