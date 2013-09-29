@@ -17,6 +17,7 @@ import net.mcft.copy.vanilladj.config.setting.DoubleSetting;
 import net.mcft.copy.vanilladj.config.setting.IntegerSetting;
 import net.mcft.copy.vanilladj.config.setting.Setting;
 import net.mcft.copy.vanilladj.config.setting.TimeSetting;
+import net.mcft.copy.vanilladj.misc.Utils;
 
 public class Configuration {
 	
@@ -34,6 +35,7 @@ public class Configuration {
 		newLine();
 		comment("Note: Changes to this file will be overriden,");
 		comment("      except for changes to the actual settings.");
+		newLine();
 		
 		new TimeSetting(this, "playerDeathItemLifespan", 30 * 60).
 				setCommentDefault("Changes the time items will stay when dropped by a player who died.");
@@ -111,7 +113,7 @@ public class Configuration {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(file));
-			String currentCategory = null;
+			List<String> currentCategory = new ArrayList<String>();
 			String line;
 			while ((line = reader.readLine()) != null) {
 				line = line.trim();
@@ -120,8 +122,8 @@ public class Configuration {
 					String[] split = line.split("=");
 					String name = split[0].trim();
 					String value = split[1].trim();
-					if (currentCategory != null)
-						name = currentCategory + "." + name;
+					if (currentCategory.size() > 0)
+						name = Utils.join(currentCategory, ".") + "." + name;
 					Setting setting = settings.get(name);
 					if (setting != null) {
 						if (!setting.parse(value))
@@ -129,13 +131,11 @@ public class Configuration {
 					} else VanillaAdjustments.log.warning("Configuration: Unknown setting '" + name + "'.");
 				} else if (line.endsWith("{")) {
 					String category = line.substring(0, line.length() - 1).trim().toLowerCase();
-					if (currentCategory != null)
-						VanillaAdjustments.log.warning("Configuration: Opening category when there's already one open.");
-					currentCategory = category;
+					currentCategory.add(category);
 				} else if (line.equals("}")) {
-					if (currentCategory != null) {
-						currentCategory = null;
-					} else VanillaAdjustments.log.warning("Configuration: Closing category when there isn't one open.");
+					if (currentCategory.size() > 0)
+						currentCategory.remove(currentCategory.size() - 1);
+					else VanillaAdjustments.log.warning("Configuration: Closing category when there isn't one open.");
 				} else VanillaAdjustments.log.warning("Configuration: Could not parse line '" + line + "'.");
 			}
 		} catch (FileNotFoundException e) {
@@ -154,36 +154,56 @@ public class Configuration {
 		try {
 			writer = new BufferedWriter(new FileWriter(file));
 			
-			String category = null;
+			List<String> currentCategory = new ArrayList<String>();
 			
 			for (Object obj : fileStructure) {
 				if (obj instanceof String) {
 					
-					if (category != null) writer.write("  ");
+					writer.write(Utils.repeat("  ", currentCategory.size()));
 					writer.write((String)obj + "\n");
 					
 				} else if (obj instanceof Setting) {
 					Setting setting = (Setting)obj;
 					
-					if ((setting.category == null) ? (category == null)
-					                               : !setting.category.equalsIgnoreCase(category)) {
-						if (category != null) writer.write("}\n");
-						writer.write("\n");
-						category = setting.category;
-						if (category != null) writer.write(category.toUpperCase() + " {\n");
+					boolean closed = false;
+					for (int i = 0; i < currentCategory.size(); i++)
+						if ((setting.category.length <= i) ||
+						    !(setting.category[i].equalsIgnoreCase(currentCategory.get(i)))) {
+							for (int j = currentCategory.size() - 1; j >= i; j--) {
+								currentCategory.remove(j);
+								writer.write(Utils.repeat("  ", j + i) + "\n");
+								writer.write(Utils.repeat("  ", j) + "}\n");
+							}
+							writer.write(Utils.repeat("  ", i) + "\n");
+							closed = true;
+							break;
+						}
+					
+					if (setting.category.length > currentCategory.size()) {
+						if (!closed)
+							writer.write(Utils.repeat("  ", currentCategory.size()) + "\n");
+						for (int i = currentCategory.size(); i < setting.category.length; i++) {
+							currentCategory.add(setting.category[i]);
+							writer.write(Utils.repeat("  ", i));
+							writer.write(setting.category[i].toUpperCase() + " {\n");
+							writer.write(Utils.repeat("  ", i) + "\n");
+						}
 					}
 					
 					if (setting.hasComment()) {
-						if (category != null) writer.write("  ");
+						writer.write(Utils.repeat("  ", currentCategory.size()));
 						writer.write("# " + setting.getComment() + "\n");
 					}
-					if (category != null) writer.write("  ");
+					writer.write(Utils.repeat("  ", currentCategory.size()));
 					writer.write(setting.name + " = " + setting.valueString() + "\n");
 					
 				}
 			}
 			
-			if (category != null) writer.write("}\n");
+			for (int i = currentCategory.size() - 1; i >= 0; i--) {
+				writer.write(Utils.repeat("  ", i + 1) + "\n");
+				writer.write(Utils.repeat("  ", i) + "}\n");
+			}
 			
 		} catch (Exception e) {
 			VanillaAdjustments.log.warning("Could not save configuration file!");

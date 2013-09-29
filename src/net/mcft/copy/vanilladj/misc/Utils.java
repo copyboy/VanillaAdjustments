@@ -1,6 +1,8 @@
 package net.mcft.copy.vanilladj.misc;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -78,6 +80,24 @@ public final class Utils {
 		Item.itemsList[id] = null;
 		try { with.getConstructor(int.class).newInstance(id - 256); }
 		catch (Exception e) { throw new Error(e); }
+	}
+	
+	public static String repeat(String str, int num) {
+		if (str == null) return null;
+		StringBuilder sb = new StringBuilder(str.length() * num);
+		for (int i = 0; i < num; i++) sb.append(str);
+		return sb.toString();
+	}
+	
+	public static String join(Collection col, String delimiter) {
+		StringBuilder sb = new StringBuilder();
+		Iterator iterator = col.iterator();
+		while (iterator.hasNext()) {
+			sb.append(iterator.next());
+			if (!iterator.hasNext()) break;
+			sb.append(delimiter);
+		}
+		return sb.toString();
 	}
 	
 }

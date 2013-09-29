@@ -1,6 +1,7 @@
 package net.mcft.copy.vanilladj.config.setting;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.mcft.copy.vanilladj.config.Configuration;
@@ -11,7 +12,7 @@ public abstract class Setting<T> {
 	private String comment = null;
 	
 	public final Configuration config;
-	public final String category;
+	public final String[] category;
 	public final String name;
 	public final T defaultValue;
 	
@@ -23,8 +24,8 @@ public abstract class Setting<T> {
 		this.config = config;
 		
 		String[] split = namespace.split("\\.");
-		category = ((split.length > 1) ? split[0] : null);
-		name = ((split.length > 1) ? split[1] : split[0]);
+		category = Arrays.copyOfRange(split, 0, split.length - 1);
+		name = split[split.length - 1];
 		
 		this.defaultValue = defaultValue;
 		value = defaultValue;
