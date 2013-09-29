@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import net.mcft.copy.vanilladj.block.BlockWoodFence;
 import net.mcft.copy.vanilladj.block.BlockWoodPressurePlate;
+import net.mcft.copy.vanilladj.config.Configuration;
 import net.mcft.copy.vanilladj.entity.EntityDropModifier;
 import net.mcft.copy.vanilladj.entity.EntityRandomDropEvent;
 import net.mcft.copy.vanilladj.item.ItemPickaxeDiamond;
@@ -31,13 +32,14 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.common.network.NetworkMod;
 
 @Mod(modid = Constants.modId,
      name = Constants.modName,
      version = "@VERSION@",
      useMetadata = true)
+@NetworkMod(clientSideRequired = true,
+            serverSideRequired = false)
 public class VanillaAdjustments {
 	
 	@Instance(Constants.modId)
@@ -45,12 +47,16 @@ public class VanillaAdjustments {
 	
 	public static Logger log;
 	
+	public static Configuration config;
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		
 		log = event.getModLog();
 		
-		Config.load(event.getSuggestedConfigurationFile());
+		config = new Configuration(event.getSuggestedConfigurationFile());
+		config.load();
+		config.save();
 		
 	}
 	
@@ -60,8 +66,7 @@ public class VanillaAdjustments {
 		MinecraftForge.EVENT_BUS.register(new EntityDropModifier());
 		MinecraftForge.EVENT_BUS.register(new EntityRandomDropEvent());
 		MinecraftForge.EVENT_BUS.register(new PlayerDeathDropModifier());
-		
-		TickRegistry.registerTickHandler(new PlayerRegenerationHandler(), Side.SERVER);
+		MinecraftForge.EVENT_BUS.register(new PlayerRegenerationHandler());
 		
 		Utils.replace(Item.pickaxeIron, ItemPickaxeIron.class);
 		Utils.replace(Item.pickaxeDiamond, ItemPickaxeDiamond.class);
