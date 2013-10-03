@@ -12,26 +12,19 @@ public class RecipeReplacer implements IRecipeListener {
 	
 	private final ItemStack[] replaceIn;
 	
-	public RecipeReplacer(Object replace, Object with, Object... replaceIn) {
-		
-		this.replace = Utils.makeStack(replace);
-		this.with = Utils.makeStack(with);
-		
-		this.replaceIn = new ItemStack[replaceIn.length];
-		for (int i = 0; i < replaceIn.length; i++)
-			this.replaceIn[i] = Utils.makeStack(replaceIn[i]);
-		
+	public RecipeReplacer(ItemStack replace, ItemStack with, ItemStack... replaceIn) {
+		this.replace = replace;
+		this.with = with;
+		this.replaceIn = replaceIn;
 	}
 	
 	@Override
 	public void doSomethingWith(RecipeIterator iterator, IRecipe recipe) {
-		
 		ItemStack output = recipe.getRecipeOutput();
-		if ((output == null) || ((replaceIn.length > 0) && !Utils.contains(replaceIn, output))) return;
+		if ((output == null) || (replaceIn.length <= 0) || !Utils.contains(replaceIn, output)) return;
 		
 		RecipeContainer container = new RecipeContainer(recipe);
 		container.replace(replace, with);
-		
 	}
 	
 }

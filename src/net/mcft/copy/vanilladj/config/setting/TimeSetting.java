@@ -7,8 +7,8 @@ import net.mcft.copy.vanilladj.config.Configuration;
 
 public class TimeSetting extends IntegerSetting {
 	
-	public TimeSetting(Configuration config, String namespace, Integer defaultValue) {
-		super(config, namespace, defaultValue);
+	public TimeSetting(Configuration config, String fullName, Integer defaultValue) {
+		super(config, fullName, defaultValue);
 	}
 	
 	@Override

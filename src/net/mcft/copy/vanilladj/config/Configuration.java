@@ -17,7 +17,10 @@ import net.mcft.copy.vanilladj.config.setting.DoubleSetting;
 import net.mcft.copy.vanilladj.config.setting.IntegerSetting;
 import net.mcft.copy.vanilladj.config.setting.Setting;
 import net.mcft.copy.vanilladj.config.setting.TimeSetting;
+import net.mcft.copy.vanilladj.config.setting.list.ItemListSetting;
+import net.mcft.copy.vanilladj.config.setting.list.RecipeReplaceListSetting;
 import net.mcft.copy.vanilladj.misc.Utils;
+import net.minecraft.block.Block;
 
 public class Configuration {
 	
@@ -41,8 +44,13 @@ public class Configuration {
 				setCommentDefault("Changes the time items will stay when dropped by a player who died.");
 		
 		healSettings();
+		adjustmentSettings();
+		recipesSettings();
+		generationSettings();
 		
 	}
+	
+	// Settings
 	
 	private void healSettings() {
 		
@@ -90,8 +98,37 @@ public class Configuration {
 		
 	}
 	
+	private void adjustmentSettings() {
+		
+	}
+	
+	private void recipesSettings() {
+		
+		new ItemListSetting(this, "recipes.disable", false).
+				setComment("Removes the recipes of these items from the game.");
+		
+		new ItemListSetting(this, "recipes.reverse", false,
+		                    Block.woodSingleSlab, Block.stoneSingleSlab, Block.stairsWoodOak,
+		                    Block.stairsWoodSpruce, Block.stairsWoodBirch, Block.stairsWoodJungle,
+		                    Block.stairsSandStone, Block.stairsCobblestone, Block.stairsBrick,
+		                    Block.stairsStoneBrick, Block.stairsNetherBrick, Block.stairsNetherQuartz).
+				setComment("Adds reverse recipes for these items.");
+		
+		new RecipeReplaceListSetting(this, "recipes.replace").
+				setComment("Replaces one thing with another in recipes.");
+		
+	}
+	
+	private void generationSettings() {
+		
+	}
+	
+	// Comments etc.
+	
 	private void comment(String comment) { fileStructure.add("# " + comment); }
 	private void newLine() { fileStructure.add(""); }
+	
+	// Getting setting values
 	
 	public Object getValue(String setting) {
 		return settings.get(setting).value;
@@ -109,6 +146,8 @@ public class Configuration {
 		return getInteger(setting) * 20;
 	}
 	
+	// Loading / saving
+	
 	public void load() {
 		BufferedReader reader = null;
 		try {
@@ -118,25 +157,27 @@ public class Configuration {
 			while ((line = reader.readLine()) != null) {
 				line = line.trim();
 				if (line.isEmpty() || line.startsWith("#")) continue;
-				if (line.contains("=")) {
-					String[] split = line.split("=");
-					String name = split[0].trim();
-					String value = split[1].trim();
-					if (currentCategory.size() > 0)
-						name = Utils.join(currentCategory, ".") + "." + name;
-					Setting setting = settings.get(name);
-					if (setting != null) {
-						if (!setting.parse(value))
-							VanillaAdjustments.log.warning("Configuration: Couldn't parse '" + value + "' for " + name + ".");
-					} else VanillaAdjustments.log.warning("Configuration: Unknown setting '" + name + "'.");
-				} else if (line.endsWith("{")) {
-					String category = line.substring(0, line.length() - 1).trim().toLowerCase();
-					currentCategory.add(category);
-				} else if (line.equals("}")) {
-					if (currentCategory.size() > 0)
-						currentCategory.remove(currentCategory.size() - 1);
-					else VanillaAdjustments.log.warning("Configuration: Closing category when there isn't one open.");
-				} else VanillaAdjustments.log.warning("Configuration: Could not parse line '" + line + "'.");
+				try {
+					if (line.contains("=")) {
+						String[] split = line.split("=", -1);
+						String name = split[0].trim();
+						String value = split[1].trim();
+						if (currentCategory.size() > 0)
+							name = Utils.join(currentCategory, ".") + "." + name;
+						Setting setting = settings.get(name);
+						if (setting != null) setting.read(reader, value);
+						else VanillaAdjustments.log.warning("Configuration: Unknown setting '" + name + "'.");
+					} else if (line.endsWith("{")) {
+						String category = line.substring(0, line.length() - 1).trim().toLowerCase();
+						currentCategory.add(category);
+					} else if (line.equals("}")) {
+						if (currentCategory.size() > 0)
+							currentCategory.remove(currentCategory.size() - 1);
+						else VanillaAdjustments.log.warning("Configuration: Closing category when there isn't one open.");
+					} else throw new Exception();
+				} catch (Exception e) {
+					VanillaAdjustments.log.warning("Configuration: Could not parse line '" + line + "'.");
+				}
 			}
 		} catch (FileNotFoundException e) {
 			// Do nothing.
@@ -171,7 +212,7 @@ public class Configuration {
 						    !(setting.category[i].equalsIgnoreCase(currentCategory.get(i)))) {
 							for (int j = currentCategory.size() - 1; j >= i; j--) {
 								currentCategory.remove(j);
-								writer.write(Utils.repeat("  ", j + i) + "\n");
+								writer.write(Utils.repeat("  ", j + 1) + "\n");
 								writer.write(Utils.repeat("  ", j) + "}\n");
 							}
 							writer.write(Utils.repeat("  ", i) + "\n");
@@ -186,17 +227,11 @@ public class Configuration {
 							currentCategory.add(setting.category[i]);
 							writer.write(Utils.repeat("  ", i));
 							writer.write(setting.category[i].toUpperCase() + " {\n");
-							writer.write(Utils.repeat("  ", i) + "\n");
+							writer.write(Utils.repeat("  ", i + 1) + "\n");
 						}
 					}
 					
-					if (setting.hasComment()) {
-						writer.write(Utils.repeat("  ", currentCategory.size()));
-						writer.write("# " + setting.getComment() + "\n");
-					}
-					writer.write(Utils.repeat("  ", currentCategory.size()));
-					writer.write(setting.name + " = " + setting.valueString() + "\n");
-					
+					setting.write(writer, Utils.repeat("  ", currentCategory.size()));
 				}
 			}
 			

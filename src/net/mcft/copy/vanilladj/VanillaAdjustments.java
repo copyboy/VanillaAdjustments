@@ -1,10 +1,12 @@
 package net.mcft.copy.vanilladj;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import net.mcft.copy.vanilladj.block.BlockWoodFence;
 import net.mcft.copy.vanilladj.block.BlockWoodPressurePlate;
 import net.mcft.copy.vanilladj.config.Configuration;
+import net.mcft.copy.vanilladj.config.setting.list.RecipeReplaceListSetting.Entry;
 import net.mcft.copy.vanilladj.entity.EntityDropModifier;
 import net.mcft.copy.vanilladj.entity.EntityRandomDropEvent;
 import net.mcft.copy.vanilladj.item.ItemPickaxeDiamond;
@@ -17,9 +19,9 @@ import net.mcft.copy.vanilladj.player.PlayerDeathDropModifier;
 import net.mcft.copy.vanilladj.player.PlayerRegenerationHandler;
 import net.mcft.copy.vanilladj.recipe.RecipeItemReplacerWood;
 import net.mcft.copy.vanilladj.recipe.RecipeIterator;
-import net.mcft.copy.vanilladj.recipes.SlabRecipeReverser;
-import net.mcft.copy.vanilladj.recipes.StairRecipeReverser;
-import net.mcft.copy.vanilladj.recipes.StoneRecipeReplacer;
+import net.mcft.copy.vanilladj.recipe.RecipeRemover;
+import net.mcft.copy.vanilladj.recipe.RecipeReplacer;
+import net.mcft.copy.vanilladj.recipe.RecipeReverser;
 import net.minecraft.block.Block;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
@@ -88,9 +90,14 @@ public class VanillaAdjustments {
 		
 		RecipeIterator iterator = new RecipeIterator();
 		
-		iterator.listen(StoneRecipeReplacer.instance);
-		iterator.listen(SlabRecipeReverser.instance);
-		iterator.listen(StairRecipeReverser.instance);
+		ItemStack[] disabledRecipes = ((List<ItemStack>)config.getValue("recipes.disable")).toArray(new ItemStack[0]);
+		iterator.listen(new RecipeRemover(disabledRecipes));
+		
+		ItemStack[] reversedRecipes = ((List<ItemStack>)config.getValue("recipes.reverse")).toArray(new ItemStack[0]);
+		iterator.listen(new RecipeReverser(reversedRecipes));
+		
+		for (Entry entry : (List<Entry>)config.getValue("recipes.replace"))
+			iterator.listen(new RecipeReplacer(entry.replace, entry.with, entry.replaceIn));
 		
 		iterator.listen(new RecipeItemReplacerWood(
 				Item.stick, ItemStick.class, false,

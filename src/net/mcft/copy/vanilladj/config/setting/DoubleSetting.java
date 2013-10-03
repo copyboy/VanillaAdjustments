@@ -6,19 +6,8 @@ import net.mcft.copy.vanilladj.config.setting.validation.SettingValidatorRange;
 
 public class DoubleSetting extends Setting<Double> {
 	
-	public DoubleSetting(Configuration config, String namespace, double defaultValue) {
-		super(config, namespace, defaultValue);
-	}
-	
-	@Override
-	public DoubleSetting setComment(String comment) {
-		super.setComment(comment);
-		return this;
-	}
-	@Override
-	public DoubleSetting setCommentDefault(String comment) {
-		super.setCommentDefault(comment);
-		return this;
+	public DoubleSetting(Configuration config, String fullName, double defaultValue) {
+		super(config, fullName, defaultValue);
 	}
 	
 	public DoubleSetting range(double minValue, double maxValue) {

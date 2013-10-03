@@ -6,19 +6,8 @@ import net.mcft.copy.vanilladj.config.setting.validation.SettingValidatorRange;
 
 public class IntegerSetting extends Setting<Integer> {
 	
-	public IntegerSetting(Configuration config, String namespace, int defaultValue) {
-		super(config, namespace, defaultValue);
-	}
-	
-	@Override
-	public IntegerSetting setComment(String comment) {
-		super.setComment(comment);
-		return this;
-	}
-	@Override
-	public IntegerSetting setCommentDefault(String comment) {
-		super.setCommentDefault(comment);
-		return this;
+	public IntegerSetting(Configuration config, String fullName, int defaultValue) {
+		super(config, fullName, defaultValue);
 	}
 	
 	public IntegerSetting range(int minValue, int maxValue) {

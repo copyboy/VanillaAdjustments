@@ -6,8 +6,8 @@ import net.mcft.copy.vanilladj.config.setting.validation.ISettingValidator;
 
 public class BooleanSetting extends Setting<Boolean> {
 	
-	public BooleanSetting(Configuration config, String namespace, boolean defaultValue) {
-		super(config, namespace, defaultValue);
+	public BooleanSetting(Configuration config, String fullName, boolean defaultValue) {
+		super(config, fullName, defaultValue);
 	}
 	
 	@Override

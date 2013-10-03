@@ -3,6 +3,7 @@ package net.mcft.copy.vanilladj.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.mcft.copy.vanilladj.VanillaAdjustments;
 import net.mcft.copy.vanilladj.misc.Constants;
 import net.mcft.copy.vanilladj.misc.Utils;
 import net.minecraft.item.ItemStack;
@@ -15,21 +16,15 @@ public class RecipeReverser implements IRecipeListener {
 	
 	private final ItemStack[] reverse;
 	
-	public RecipeReverser(Object... reverse) {
-		
-		this.reverse = new ItemStack[reverse.length];
-		for (int i = 0; i < reverse.length; i++)
-			this.reverse[i] = Utils.makeStack(reverse[i]);
-		
+	public RecipeReverser(ItemStack... reverse) {
+		this.reverse = reverse;
 	}
 	
 	@Override
 	public void doSomethingWith(RecipeIterator iterator, IRecipe recipe) {
-		
 		ItemStack output = recipe.getRecipeOutput();
-		if ((output == null) || !Utils.contains(reverse, output)) return;
+		if ((output == null) || (reverse.length <= 0) || !Utils.contains(reverse, output)) return;
 		reverse(recipe);
-		
 	}
 	
 	public static void reverse(IRecipe recipe) {
@@ -43,14 +38,21 @@ public class RecipeReverser implements IRecipeListener {
 		ItemStack recipeItem = null;
 		for (ItemStack item : container.getItemStacksOnly()) {
 			if (recipeItem == null) recipeItem = item.copy();
-			else if (!Utils.matches(recipeItem, item)) return;
+			else if (!Utils.matches(recipeItem, item)) {
+				VanillaAdjustments.log.warning("Failed to create reverse recipe for " + output.getDisplayName() + ": " +
+				                               "Recipe can't contain more than one type of item.");
+				return;
+			}
 			recipeAmount++;
 		}
 		
 		int gcd = gcd(resultAmount, recipeAmount);
 		resultAmount /= gcd;
 		recipeAmount /= gcd;
-		if (resultAmount > 9) return;
+		if (resultAmount > 9) {
+			VanillaAdjustments.log.warning("Failed to create reverse recipe for " + output.getDisplayName() + ".");
+			return;
+		}
 		
 		List<ItemStack> recipeItems = new ArrayList<ItemStack>(resultAmount);
 		for (int i = 0; i < resultAmount; i++) recipeItems.add(output);

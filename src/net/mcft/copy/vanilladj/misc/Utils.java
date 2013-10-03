@@ -3,6 +3,7 @@ package net.mcft.copy.vanilladj.misc;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -29,6 +30,28 @@ public final class Utils {
 	}
 	public static ItemStack makeStack(Object object) {
 		return makeStack(object, Constants.anyDamage);
+	}
+	
+	public static ItemStack[] makeStacks(Object... objects) {
+		List<ItemStack> stacks = new ArrayList<ItemStack>();
+		boolean intAllowed = false;
+		for (Object object : objects) {
+			if (object instanceof ItemStack) {
+				stacks.add((ItemStack)object);
+				intAllowed = false;
+			} else if (object instanceof Block) {
+				stacks.add(new ItemStack((Block)object, 1, Constants.anyDamage));
+				intAllowed = true;
+			} else if (object instanceof Item) {
+				stacks.add(new ItemStack((Item)object, 1, Constants.anyDamage));
+				intAllowed = true;
+			} else if (object instanceof Integer) {
+				if (!intAllowed) throw new Error("Integer behind non-block/item.");
+				stacks.get(stacks.size() - 1).setItemDamage((Integer)object);
+				intAllowed = false;
+			} else throw new Error("Invalid type.");
+		}
+		return stacks.toArray(new ItemStack[0]);
 	}
 	
 	public static boolean matches(ItemStack a, ItemStack b) {
