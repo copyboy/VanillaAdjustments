@@ -71,10 +71,15 @@ public class PlayerRegenerationProperties implements IExtendedEntityProperties {
 	}
 	
 	private void updateHealing() {
+		FoodStats food = player.getFoodStats();
+		
+		// Reset foodTimer to disable Vanilla healing
+		// regardless of naturalRegeneration gamerule.
+		if (food.getFoodLevel() > 0)
+			food.foodTimer = 0;
+		
 		if (timePenalty > 0) timePenalty--;
 		else if (player.shouldHeal()) {
-			FoodStats food = player.getFoodStats();
-			
 			double foodFactor;
 			int hungerMaximum = VanillaAdjustments.config.getInteger("regeneration.hungerMaximum");
 			int hungerMinimum = VanillaAdjustments.config.getInteger("regeneration.hungerMinimum");
