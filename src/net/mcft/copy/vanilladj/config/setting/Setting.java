@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import net.mcft.copy.vanilladj.VanillaAdjustments;
 import net.mcft.copy.vanilladj.config.Configuration;
@@ -41,7 +42,7 @@ public abstract class Setting<T> {
 		this.defaultValue = defaultValue;
 		value = defaultValue;
 		
-		config.settings.put(fullName, this);
+		config.settings.put(fullName.toLowerCase(Locale.ENGLISH), this);
 		config.fileStructure.add(this);
 		
 	}

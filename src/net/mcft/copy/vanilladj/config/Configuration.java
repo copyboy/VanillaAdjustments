@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import net.mcft.copy.vanilladj.VanillaAdjustments;
@@ -59,41 +60,35 @@ public class Configuration {
 		new TimeSetting(this, "regeneration.timeBetweenHeal", 30).range(0, Integer.MAX_VALUE).
 				setCommentDefault("The base time between healing half a heart.");
 		
-		newLine();
-		
-		new IntegerSetting(this, "regeneration.hungerMinimum", 15).range(0, 20).
+		new IntegerSetting(this, "regeneration.hunger.minimum", 15).range(0, 20).
 				setCommentDefault("Natural regeration effect starts at this hunger level. Valid: 0 to 20.");
-		new IntegerSetting(this, "regeneration.hungerMaximum", 18).range(0, 20).
+		new IntegerSetting(this, "regeneration.hunger.maximum", 18).range(0, 20).
 				setCommentDefault("Natural regeration is at maximum effectiveness at this hunger level. Valid: 0 to 20.");
-		new DoubleSetting(this, "regeneration.exhaustion", 3.0).
+		new DoubleSetting(this, "regeneration.hunger.exhaustion", 3.0).
 				setCommentDefault("The amount of exhaustion added when healing naturally.");
 		
-		newLine();
-		
-		new TimeSetting(this, "regeneration.hurtTimePenalty", 0).
+		new TimeSetting(this, "regeneration.hurtPenalty.amount", 0).
 				setCommentDefault("When hurt, increases the time it takes to heal by this amount.");
-		new TimeSetting(this, "regeneration.hurtTimePenaltyTimeout", 10).
+		new TimeSetting(this, "regeneration.hurtPenalty.timeout", 10).
 				setCommentDefault("Time of immunity from the hurt time penalty after it being applied.");
-		new TimeSetting(this, "regeneration.hurtTimePenaltyMaximum", 10).
+		new TimeSetting(this, "regeneration.hurtPenalty.maximum", 10).
 				setCommentDefault("Maximum hurt time penalty at a time.");
-		new TimeSetting(this, "regeneration.hurtTimePenaltyMaximumPerHeal", 20).
+		new TimeSetting(this, "regeneration.hurtPenalty.maximumPerHeal", 20).
 				setCommentDefault("Maximum hurt time penalty per heal cycle.");
 		
-		newLine();
-		
-		new DoubleSetting(this, "regeneration.bonusMinimumFactor", 1.0).
+		new DoubleSetting(this, "regeneration.bonus.minimumFactor", 1.0).
 				setCommentDefault("Without the bonus, apply this factor to the base heal time.");
-		new DoubleSetting(this, "regeneration.bonusMaximumFactor", 1.0).
+		new DoubleSetting(this, "regeneration.bonus.maximumFactor", 1.0).
 				setCommentDefault("Without the full bonus, apply this factor to the base heal time.");
-		new TimeSetting(this, "regeneration.bonusStartTime", 60).
+		new TimeSetting(this, "regeneration.bonus.startTime", 60).
 				setCommentDefault("After this time, the healing factor will start to increase.");
-		new TimeSetting(this, "regeneration.bonusStopTime", 120).
+		new TimeSetting(this, "regeneration.bonus.stopTime", 5 * 60).
 				setCommentDefault("After this time, the healing factor will be at its maximum.");
-		new TimeSetting(this, "regeneration.bonusMaximumTime", 180).
+		new TimeSetting(this, "regeneration.bonus.maximumTime", 6 * 60).
 				setCommentDefault("The maximum accumulated bonus time.");
-		new TimeSetting(this, "regeneration.bonusHurtPenalty", 120).
+		new TimeSetting(this, "regeneration.bonus.hurtPenalty", 3 * 60).
 				setCommentDefault("When hurt, decreases the bonus time by this amount, and with that the factor.");
-		new TimeSetting(this, "regeneration.bonusHurtPenaltyTimeout", 10).
+		new TimeSetting(this, "regeneration.bonus.hurtPenaltyTimeout", 15).
 				setCommentDefault("Time of immunity from the bonus hurt penalty after it being applied.");
 		
 	}
@@ -131,7 +126,7 @@ public class Configuration {
 	// Getting setting values
 	
 	public Object getValue(String setting) {
-		return settings.get(setting).value;
+		return settings.get(setting.toLowerCase(Locale.ENGLISH)).value;
 	}
 	public boolean getBoolean(String setting) {
 		return (Boolean)getValue(setting);
@@ -164,11 +159,11 @@ public class Configuration {
 						String value = split[1].trim();
 						if (currentCategory.size() > 0)
 							name = Utils.join(currentCategory, ".") + "." + name;
-						Setting setting = settings.get(name);
+						Setting setting = settings.get(name.toLowerCase(Locale.ENGLISH));
 						if (setting != null) setting.read(reader, value);
 						else VanillaAdjustments.log.warning("Configuration: Unknown setting '" + name + "'.");
 					} else if (line.endsWith("{")) {
-						String category = line.substring(0, line.length() - 1).trim().toLowerCase();
+						String category = line.substring(0, line.length() - 1).trim().toLowerCase(Locale.ENGLISH);
 						currentCategory.add(category);
 					} else if (line.equals("}")) {
 						if (currentCategory.size() > 0)
@@ -212,7 +207,7 @@ public class Configuration {
 						    !(setting.category[i].equalsIgnoreCase(currentCategory.get(i)))) {
 							for (int j = currentCategory.size() - 1; j >= i; j--) {
 								currentCategory.remove(j);
-								writer.write(Utils.repeat("  ", j + 1) + "\n");
+								if (j < 1) writer.write(Utils.repeat("  ", j + 1) + "\n");
 								writer.write(Utils.repeat("  ", j) + "}\n");
 							}
 							writer.write(Utils.repeat("  ", i) + "\n");
@@ -226,8 +221,8 @@ public class Configuration {
 						for (int i = currentCategory.size(); i < setting.category.length; i++) {
 							currentCategory.add(setting.category[i]);
 							writer.write(Utils.repeat("  ", i));
-							writer.write(setting.category[i].toUpperCase() + " {\n");
-							writer.write(Utils.repeat("  ", i + 1) + "\n");
+							writer.write(setting.category[i].toUpperCase(Locale.ENGLISH) + " {\n");
+							if (i < 1) writer.write("  \n");
 						}
 					}
 					
@@ -236,7 +231,7 @@ public class Configuration {
 			}
 			
 			for (int i = currentCategory.size() - 1; i >= 0; i--) {
-				writer.write(Utils.repeat("  ", i + 1) + "\n");
+				if (i < 1) writer.write("  \n");
 				writer.write(Utils.repeat("  ", i) + "}\n");
 			}
 			
