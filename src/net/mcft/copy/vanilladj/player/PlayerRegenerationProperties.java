@@ -43,29 +43,29 @@ public class PlayerRegenerationProperties implements IExtendedEntityProperties {
 	private void updateTimePenalty() {
 		if (timePenaltyTimeout > 0) timePenaltyTimeout--;
 		else if (player.hurtResistantTime > lastHurtResistanceTime) { // See if the player got hurt.
-			int penalty = VanillaAdjustments.config.getTicks("regeneration.hurtTimePenalty");
-			int hurtTimePenaltyMaximum = VanillaAdjustments.config.getTicks("regeneration.hurtTimePenaltyMaximum");
-			int hurtTimePenaltyMaximumPerHeal = VanillaAdjustments.config.getTicks("regeneration.hurtTimePenaltyMaximumPerHeal");
+			int penalty = VanillaAdjustments.config.getTicks("regeneration.hurtPenalty.amount");
+			int hurtTimePenaltyMaximum = VanillaAdjustments.config.getTicks("regeneration.hurtPenalty.maximum");
+			int hurtTimePenaltyMaximumPerHeal = VanillaAdjustments.config.getTicks("regeneration.hurtPenalty.maximumPerHeal");
 			penalty = Math.min(penalty, hurtTimePenaltyMaximum - timePenalty);
 			penalty = Math.min(penalty, hurtTimePenaltyMaximumPerHeal - timePenaltyApplied);
 			if (penalty > 0) {
 				timePenalty += penalty;
 				timePenaltyApplied += penalty;
-				int hurtTimePenaltyTimeout = VanillaAdjustments.config.getTicks("regeneration.hurtTimePenaltyTimeout");
+				int hurtTimePenaltyTimeout = VanillaAdjustments.config.getTicks("regeneration.hurtPenalty.timeout");
 				timePenaltyTimeout = Math.max(hurtTimePenaltyTimeout, 10);
 			}
 		}
 	}
 	
 	private void updateBonus() {
-		int bonusMaximumTime = VanillaAdjustments.config.getTicks("regeneration.bonusMaximumTime");
+		int bonusMaximumTime = VanillaAdjustments.config.getTicks("regeneration.bonus.maximumTime");
 		if (bonusTime < bonusMaximumTime) bonusTime++;
 		
 		if (bonusPenaltyTimeout > 0) bonusPenaltyTimeout--;
 		else if (player.hurtResistantTime > lastHurtResistanceTime) { // See if the player got hurt.
-			int penalty = VanillaAdjustments.config.getTicks("regeneration.bonusHurtPenalty");
+			int penalty = VanillaAdjustments.config.getTicks("regeneration.bonus.hurtPenalty");
 			bonusTime = Math.max(bonusTime - penalty, 0);
-			int bonusHurtPenaltyTimeout = VanillaAdjustments.config.getTicks("regeneration.bonusHurtPenaltyTimeout");
+			int bonusHurtPenaltyTimeout = VanillaAdjustments.config.getTicks("regeneration.bonus.hurtPenaltyTimeout");
 			bonusPenaltyTimeout = Math.max(bonusHurtPenaltyTimeout, 10);
 		}
 	}
@@ -81,8 +81,8 @@ public class PlayerRegenerationProperties implements IExtendedEntityProperties {
 		if (timePenalty > 0) timePenalty--;
 		else if (player.shouldHeal()) {
 			double foodFactor;
-			int hungerMaximum = VanillaAdjustments.config.getInteger("regeneration.hungerMaximum");
-			int hungerMinimum = VanillaAdjustments.config.getInteger("regeneration.hungerMinimum");
+			int hungerMaximum = VanillaAdjustments.config.getInteger("regeneration.hunger.maximum");
+			int hungerMinimum = VanillaAdjustments.config.getInteger("regeneration.hunger.minimum");
 			if (food.getFoodLevel() >= hungerMaximum) foodFactor = 1.0;
 			else if (food.getFoodLevel() < hungerMinimum) foodFactor = 0.0;
 			else foodFactor = (double)(food.getFoodLevel() - hungerMinimum + 1) / (hungerMaximum - hungerMinimum + 1);
@@ -93,7 +93,7 @@ public class PlayerRegenerationProperties implements IExtendedEntityProperties {
 			int timeBetweenHeal = VanillaAdjustments.config.getTicks("regeneration.timeBetweenHeal");
 			if (healProgress >= timeBetweenHeal) {
 				player.heal(1.0F);
-				float exhaustion = (float)VanillaAdjustments.config.getDouble("regeneration.exhaustion");
+				float exhaustion = (float)VanillaAdjustments.config.getDouble("regeneration.hunger.exhaustion");
 				food.addExhaustion(exhaustion);
 				healProgress -= timeBetweenHeal;
 				timePenaltyApplied = 0;
@@ -102,13 +102,13 @@ public class PlayerRegenerationProperties implements IExtendedEntityProperties {
 	}
 	
 	private double calculateBonusFactor() {
-		double minFactor = VanillaAdjustments.config.getDouble("regeneration.bonusMinimumFactor");
-		double maxFactor = VanillaAdjustments.config.getDouble("regeneration.bonusMaximumFactor");
+		double minFactor = VanillaAdjustments.config.getDouble("regeneration.bonus.minimumFactor");
+		double maxFactor = VanillaAdjustments.config.getDouble("regeneration.bonus.maximumFactor");
 		if (minFactor == maxFactor)
 			return minFactor;
 		
-		int bonusStartTime = VanillaAdjustments.config.getTicks("regeneration.bonusStartTime");
-		int bonusStopTime = VanillaAdjustments.config.getTicks("regeneration.bonusStopTime");
+		int bonusStartTime = VanillaAdjustments.config.getTicks("regeneration.bonus.startTime");
+		int bonusStopTime = VanillaAdjustments.config.getTicks("regeneration.bonus.stopTime");
 		
 		if (bonusTime <= bonusStartTime) return minFactor;
 		else if (bonusTime >= bonusStopTime) return maxFactor;
