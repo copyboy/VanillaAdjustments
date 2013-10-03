@@ -15,20 +15,27 @@ failing to be so.
 'Adjustments'
 -------------
 
+The mod is going through a change from being one that mostly contains changes that
+reflect what I want to see changed in Vanilla Minecraft to being highly configurable.
+
 Since we're going for adjustments to the vanilla Minecraft game, we won't add new items.  
 
-- Replaces cobblestone with smoothstone in most recipes
-- Add reverse / back-crafting recipes for slabs and stairs
+- Adjust the time items dropped from player deaths stay (30 minutes by default)
+- Change how natural regeneration works
+- Disable any recipes you don't like
+- Add reverse recipes for any items (slab, stair and fence by default)
+- Replace stuff in some recipes (cobble -> smoothstone by default)
+
+Here are some things that are currently in but will be replaced by more configurable
+options in the future, if possible:
+
 - Wood and stone tools straight-up have more durability
-- Iron and diamond pickaxes have a chance not to use up durability when used on stone
+- Iron and diamond pickaxes have a chance to not get damaged when used on smoothstone
 - Leather and gold armor have more durability
 - Add spruce, birch and jungle versions of some items / blocks
-- Adjust mob drops, like more leather, feathers and porkchops
+- Adjusted mob drops, like more leather, feathers and porkchops
 - Chickens randomly drop feathers
 
-Fixes
------
-
-We try to fix small bugs, annoying or cosmetic issues that are in vanilla Minecraft.
-
-- Can't right-click fences unless you're leading an animal
+I'll most likely make this run as a server-only mod, unless you use settings that require
+the mod to be installed on the client. Though with the way Forge deals with Vanilla
+clients, it's currently not possible to have them connect to a modded server.
