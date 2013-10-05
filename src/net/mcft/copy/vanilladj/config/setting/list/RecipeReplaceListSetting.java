@@ -26,7 +26,7 @@ public class RecipeReplaceListSetting extends ListSetting<RecipeReplaceListSetti
 	
 	public static class ElementHandler implements IElementHandler<Entry> {
 		
-		private static final Pattern pattern = Pattern.compile(String.format("^(%1$s) with (%1$s) in (%1$s(?:, ?%1$s)*)$", "[0-9]+"));
+		private static final Pattern pattern = Pattern.compile(String.format("^(%1$s) with (%1$s) in (%1$s(?:, ?%1$s)*)$", "[\\w\\.:]+"));
 		private static final IElementHandler<ItemStack> base = new ItemListSetting.ElementHandler();
 		
 		@Override

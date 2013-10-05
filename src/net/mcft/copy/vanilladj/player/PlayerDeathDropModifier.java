@@ -10,7 +10,7 @@ public class PlayerDeathDropModifier {
 	@ForgeSubscribe
 	public void on(PlayerDropsEvent event) {
 		for (EntityItem item : event.drops)
-			item.lifespan = VanillaAdjustments.config.getInteger("playerDeathItemLifespan") * 20;
+			item.lifespan = VanillaAdjustments.config.getTicks("playerDeathItemLifespan");
 	}
 	
 }

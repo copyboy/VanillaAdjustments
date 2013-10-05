@@ -123,4 +123,17 @@ public final class Utils {
 		return sb.toString();
 	}
 	
+	public static boolean wildcardMatch(String wild, String text) {
+		String[] wildSplit = wild.split("\\*", -1);
+		if (!wildSplit[0].isEmpty())
+			if (!text.startsWith(wildSplit[0]))
+				return false;
+		for (String w : wildSplit) {
+			int index = text.indexOf(w);
+			if (index < 0) return false;
+			text = text.substring(index + w.length());
+		}
+		return true;
+	}
+	
 }
