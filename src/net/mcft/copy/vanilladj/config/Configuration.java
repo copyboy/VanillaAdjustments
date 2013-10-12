@@ -62,9 +62,9 @@ public class Configuration {
 				.setCommentDefault("The base time between healing half a heart.");
 		
 		new IntegerSetting(this, "regeneration.hunger.minimum", 15).range(0, 20)
-				.setCommentDefault("Natural regeration effect starts at this hunger level. Valid: 0 to 20.");
+				.setCommentDefault("Natural regeneration effect starts at this hunger level. Valid: 0 to 20.");
 		new IntegerSetting(this, "regeneration.hunger.maximum", 18).range(0, 20)
-				.setCommentDefault("Natural regeration is at maximum effectiveness at this hunger level. Valid: 0 to 20.");
+				.setCommentDefault("Natural regeneration is at maximum effectiveness at this hunger level. Valid: 0 to 20.");
 		new DoubleSetting(this, "regeneration.hunger.exhaustion", 3.0)
 				.setCommentDefault("The amount of exhaustion added when healing naturally.");
 		
